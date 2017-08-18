@@ -91,15 +91,25 @@
 				component.set('v.showTable', true);
 			}
 		}
-		formattedData.rows.forEach(function(row){		
-			$A.createComponent(
-				"c:strike_row",
-				{
-					"fields": row.fields
-				},
-				createRowCallback
+
+		if(formattedData.rows > 0) {
+			formattedData.rows.forEach(function(row){
+				$A.createComponent(
+					"c:strike_row",
+					{
+						"fields": row.fields
+					},
+					createRowCallback
 				)
-		});
+			});
+
+			helper.sortTable(component, null, helper);
+		}
+		else {
+			// we don't have any new rows so we need to set the body here (createRowCallback doesn't get called)
+			component.set('v.body', body);
+		}
+		
 	},
 	sortTable : function(component, event, helper){
             var selectedColumnName = event.currentTarget.dataset.columnName || component.get('v.currentSortColumn');
